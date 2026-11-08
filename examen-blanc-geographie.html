@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Examen blanc : Géographie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f9ff;--ink:#1f2350;--card:#fff;--line:#d3def5;--mut:#5b6190;--acc:#4b3fd6;--onacc:#fff;--ok:#1a8a5a;--ko:#c93a4f;--wn:#d9822b;--mg:#e8708a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12142b;--ink:#e6e9ff;--card:#1b1e3d;--line:#2b3060;--mut:#9aa1d6;--acc:#9d93ff;--onacc:#14163a;--ok:#4cd493;--ko:#ff7d90;--wn:#f0a458;--mg:#b4506a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12142b;--ink:#e6e9ff;--card:#1b1e3d;--line:#2b3060;--mut:#9aa1d6;--acc:#9d93ff;--onacc:#14163a;--ok:#4cd493;--ko:#ff7d90;--wn:#f0a458;--mg:#b4506a;color-scheme:dark}
+html{scroll-padding-top:calc(90px + env(safe-area-inset-top,0px))}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 Nunito,system-ui,sans-serif;background-image:linear-gradient(var(--line) 1px,transparent 1px);background-size:100% 32px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+h1,h2,h3{font-family:"Bricolage Grotesque",Nunito,sans-serif;margin:0;line-height:1.15}
+main{max-width:740px;margin:0 auto;padding:20px 18px 80px 34px;border-left:2px solid var(--mg);min-height:100vh}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0}
+button{font:inherit;font-weight:800;border:0;border-radius:10px;padding:12px 22px;background:var(--acc);color:var(--onacc);cursor:pointer}
+button.alt{background:transparent;color:var(--acc);border:2px solid var(--acc)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--wn);outline-offset:2px}
+header.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:11;background:var(--card);border-bottom:2px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 16px}
+#clk{font:800 28px "Bricolage Grotesque",sans-serif;font-variant-numeric:tabular-nums}
+#clk.w{color:var(--ko)}
+.sm{color:var(--mut);font-size:14px}
+.pt{background:var(--acc);color:var(--onacc);border-radius:99px;padding:1px 10px;font-size:13px;font-weight:800;white-space:nowrap}
+.q{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:14px 18px;margin:12px 0}
+.q .h{display:flex;justify-content:space-between;gap:8px;margin-bottom:6px;font-weight:800}
+.q.good{border-left:6px solid var(--ok)}.q.mid{border-left:6px solid var(--wn)}.q.bad{border-left:6px solid var(--ko)}
+select,textarea{font:inherit;width:100%;padding:9px 12px;border:2px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink)}
+select{max-width:300px}
+textarea{min-height:90px;resize:vertical;margin-top:8px}
+.it{display:flex;align-items:center;gap:10px;margin:8px 0;flex-wrap:wrap}.it>span{min-width:150px;font-weight:600}
+svg{max-width:100%;height:auto}
+.ex{color:var(--mut);font-size:15px;margin-top:6px}
+.big{font:800 64px "Bricolage Grotesque",sans-serif;color:var(--acc);line-height:1}
+.bar2{height:14px;background:var(--line);border-radius:8px;overflow:hidden;margin:4px 0 2px}
+.bar2 b{display:block;height:100%}
+.row{display:flex;justify-content:space-between;gap:10px;font-weight:800}
+#msg{color:var(--wn);font-weight:800;margin:10px 0}
+ul{padding-left:20px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const $=s=>document.querySelector(s);
+const R=a=>a[Math.floor(Math.random()*a.length)];
+const sh=a=>a.map(x=>[Math.random(),x]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+const dec=v=>String(v).replace(".",",");
+const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const nz=s=>String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/’/g,"'");
+const K=(part,pts,html,groups,need,show)=>({part,pts,html,t:"k",groups,need,show});
+const S=(part,pts,html,items,opts,expl)=>({part,pts,html,t:"s",items,opts,expl});
+const PARTS=["Définitions du cours","Schéma d’une aire urbaine","Carte des grandes aires urbaines","Étalement urbain et conséquences","Paris, métropole mondiale"];
+const TIPS=[
+"Reprends le lexique du cours et apprends les définitions presque mot pour mot : aire urbaine, métropolisation, étalement urbain, migrations pendulaires, gentrification, héliotropisme, mitage.",
+"Refais le schéma de mémoire : ville-centre + banlieue = pôle urbain ; la couronne périurbaine est un ancien espace rural en cours d’urbanisation ; autour, l’espace rural.",
+"Refais la carte de mémoire : Paris domine, puis Lyon, Marseille, Toulouse, Bordeaux, Nantes, Rennes, Lille, Strasbourg, Nice, reliées par les grands axes de transport.",
+"Étalement : loyers et immobilier chers en centre-ville, généralisation de l’automobile, recherche d’un meilleur cadre de vie. Conséquences : gentrification, mitage, transports saturés, pollution, bétonisation, campagnes en crise.",
+"Paris a trois fonctions de commandement (économique : Bourse, La Défense ; politique : Élysée, Assemblée, UNESCO ; culturel : Louvre, Sorbonne, opéras) et une accessibilité exceptionnelle (aéroports, gares TGV, RER/métro, autoroutes, Seine)."];
+const MEN=s=>s>=16?"Très bien 🎉":s>=14?"Bien 👏":s>=12?"Assez bien 👍":s>=10?"Passable : tu y es presque":"À retravailler, mais tu vas progresser";
+const DEF=[
+["l’aire urbaine",["commune","pole","couronne","40"],"Ensemble de communes d’un seul tenant formé d’un pôle urbain (ville-centre + banlieue) et d’une couronne périurbaine dont au moins 40 % des actifs travaillent dans le pôle ou dans une autre commune de l’aire."],
+["la métropolisation",["concentr","activit|fonction|command|decision","homme|population|habitant","grande.? ville|metropole"],"Concentration des hommes, des activités et des fonctions de commandement (politique, économique, culturel) dans les très grandes villes."],
+["l’étalement urbain (périurbanisation)",["expansion|extension|etend|etale|croissance|progress","urbanisation|ville|urbain","axe|transport|rural|campagne"],"Expansion de l’urbanisation le long des grands axes de transport et dans le milieu rural."],
+["les migrations pendulaires",["deplacement|trajet|aller","quotidien|jour|chaque","domicile","travail"],"Déplacements quotidiens des habitants entre leur domicile et leur lieu de travail."],
+["la gentrification",["renovation|renove|rehabilit","quartier","populaire|pauvre","aise|riche|favorise"],"Rénovation des anciens quartiers populaires du centre-ville au profit de populations aisées."],
+["l’héliotropisme",["attrait|attractiv|attire","ensoleill|soleil|sud|chaud"],"Attractivité exercée par les régions ensoleillées."],
+["le mitage des espaces ruraux",["grignot|mange|disparai|detruit|consomm|recule","rural|agricole|nature|champ|terre"],"Grignotage des espaces ruraux périurbains par de nouveaux aménagements urbains (lotissements, routes, zones commerciales)."]];
+const CITY=[["Paris",2.35,48.86],["Lille",3.06,50.63],["Strasbourg",7.75,48.58],["Lyon",4.84,45.76],["Marseille",5.37,43.3],["Nice",7.26,43.7],["Toulouse",1.44,43.6],["Bordeaux",-0.58,44.84],["Nantes",-1.55,47.22],["Rennes",-1.68,48.11]];
+const OUT=[[2.4,51.05],[4.2,50],[5.8,49.5],[8.2,49],[7.6,47.6],[6.1,46.2],[7,45.9],[6.9,44.2],[7.5,43.8],[6.5,43.1],[5,43.4],[3.1,43.1],[3,42.5],[1.7,42.5],[-1.8,43.4],[-1.2,44.7],[-1.2,45.5],[-1.2,46.15],[-2.2,47.2],[-4.4,47.8],[-4.7,48.4],[-3,48.8],[-1.5,48.7],[-1.3,49.7],[0.2,49.4],[1.6,50.2]];
+const pj=(lo,la)=>[((lo+5)*22).toFixed(0),((51.5-la)*30).toFixed(0)];
+function mapSvg(ask){
+ const o=OUT.map(p=>pj(...p).join(",")).join(" ");
+ const d=CITY.map(([n,lo,la])=>{const [x,y]=pj(lo,la),i=ask.indexOf(n);
+  return i>=0?`<circle cx="${x}" cy="${y}" r="11" fill="#c93a4f"/><text x="${x}" y="${+y+5}" text-anchor="middle" font-size="14" font-weight="800" fill="#fff">${i+1}</text>`:n=="Paris"?`<rect x="${x-6}" y="${y-6}" width="12" height="12" style="fill:var(--ink)"/><text x="${+x+10}" y="${+y+4}" font-size="12" font-weight="800" style="fill:var(--ink)">Paris</text>`:`<circle cx="${x}" cy="${y}" r="4.5" style="fill:var(--mut)"/>`}).join("");
+ return `<svg viewBox="0 0 300 290" width="100%" style="max-width:330px;display:block;margin:10px 0" role="img" aria-label="Carte de France"><polygon points="${o}" style="fill:var(--line);stroke:var(--mut);stroke-width:1.5"/>${d}</svg><div class="sm">Les points gris sont les autres grandes aires urbaines ; les points rouges numérotés sont à identifier.</div>`;
+}
+const SCH=`<svg viewBox="0 0 300 300" width="100%" style="max-width:300px;display:block;margin:10px 0" role="img" aria-label="Schéma d’une aire urbaine"><rect width="300" height="300" fill="#9db96b"/><circle cx="150" cy="150" r="110" fill="#f3d85a"/><circle cx="150" cy="150" r="75" fill="#f08a3c"/><circle cx="150" cy="150" r="38" fill="#e0607e"/><path d="M150 25V275M25 150H275" stroke="#222" stroke-width="2"/>${[[150,150,1],[150,93,2],[150,58,3],[30,30,4]].map(([x,y,n])=>`<circle cx="${x}" cy="${y}" r="13" fill="#fff" stroke="#222"/><text x="${x}" y="${y+5}" text-anchor="middle" font-size="15" font-weight="800" fill="#222">${n}</text>`).join("")}</svg>`;
+function gen(){
+ const q=[];
+ sh(DEF).slice(0,3).forEach(d=>q.push(K(0,2,`Donne la définition de <b>${d[0]}</b>.`,d[1],d[1].length,d[2])));
+ q.push(S(1,4,`Voici le schéma d’une aire urbaine. Donne le nom de chaque espace numéroté.${SCH}`,[{l:"Espace 1",c:"Ville-centre"},{l:"Espace 2",c:"Banlieue"},{l:"Espace 3",c:"Couronne périurbaine"},{l:"Espace 4",c:"Espace rural"}],["Ville-centre","Banlieue","Couronne périurbaine","Espace rural","Pôle urbain"],"Ville-centre + banlieue = pôle urbain. La couronne périurbaine est un ancien espace rural en cours d’urbanisation."));
+ const ask=sh(CITY.slice(1).map(c=>c[0])).slice(0,3);
+ q.push(S(2,3,`Sur cette carte des dix plus grandes aires urbaines françaises, nomme les trois métropoles numérotées.${mapSvg(ask)}`,ask.map((n,i)=>({l:`Point ${i+1}`,c:n})),CITY.slice(1).map(c=>c[0]).sort(),"Les dix plus grandes aires urbaines : Paris, Lyon, Marseille, Toulouse, Bordeaux, Nantes, Rennes, Lille, Strasbourg, Nice."));
+ q.push(K(3,2,`Explique pourquoi les habitants s’installent toujours plus loin du centre (étalement urbain). Donne trois causes.`,["loyer|immobilier|logement|prix|cher|cout","voiture|automobile","cadre de vie|qualite de vie|pavillon|maison|jardin|nature|calme|vert"],3,"Les loyers et l’immobilier sont chers en centre-ville ; l’automobile s’est généralisée ; les habitants recherchent un cadre de vie plus agréable (pavillon, nature)."));
+ q.push(K(3,2,`Cite deux conséquences de la croissance et de l’étalement des aires urbaines.`,["gentrif","mitage|grignot|terres agricoles|espaces ruraux","embouteillage|sature|circulation|transports? en commun","betonis|pollution","inegalit|pauvre|campagnes en crise|vieillissant|isol"],2,"Par exemple : gentrification, mitage des espaces rural, transports saturés, pollution et bétonisation, contraste entre campagnes dynamiques et campagnes en crise."));
+ const E="Commandement économique",P="Commandement politique",Cu="Commandement culturel";
+ const pl=sh([["La Bourse",E],["La Défense",E],["L’Assemblée nationale",P],["L’Élysée",P],["L’UNESCO",P],["Le Louvre",Cu],["La Sorbonne",Cu],["L’Opéra Garnier",Cu]]).slice(0,4);
+ q.push(S(4,2,`À quelle fonction de commandement de Paris chaque lieu correspond-il ?`,pl.map(p=>({l:p[0],c:p[1]})),[E,P,Cu],"Économique : Bourse, La Défense. Politique : Élysée, Assemblée, UNESCO. Culturel : Louvre, Sorbonne, Opéra Garnier."));
+ q.push(K(4,1,`Cite deux moyens de transport qui rendent Paris facilement accessible.`,["aeroport|roissy|orly|avion","tgv|gare|train|ferr","rer|metro|bus","autoroute|peripherique","seine|fluvial|bateau"],2,"Aéroports de Roissy et d’Orly, gares TGV, RER/métro, autoroutes et périphérique, voie fluviale de la Seine."));
+ return q;
+}
+function sc(q,a){
+ if(q.t=="s")return q.items.reduce((s,it,j)=>s+(a[j]===it.c?q.pts/q.items.length:0),0);
+ const t=nz(a);q.m=q.groups.filter(g=>new RegExp(g).test(t)).length;
+ return Math.round(2*q.pts*Math.min(q.m,q.need)/q.need)/2;
+}
+const DUR=2700;let qs,ans,t0,tid,conf;
+const hist=()=>{try{return JSON.parse(localStorage.getItem("aya_geo_h")||"[]")}catch(e){return[]}};
+const save=r=>{try{localStorage.setItem("aya_geo_h",JSON.stringify([...hist(),r].slice(-10)))}catch(e){}};
+function intro(){
+ const h=hist();
+ $("#app").innerHTML=`<main><h1>Examen blanc<br>Géographie</h1><p class="sm">Pour Aya · 3<sup>e</sup> · L’aire urbaine et la métropolisation en France</p>
+ <div class="card"><h3>Comme en classe</h3><ul><li>Durée : <b>45 minutes</b>. Quand le temps est écoulé, la copie est rendue automatiquement.</li><li>9 questions sur <b>20 points</b> : définitions, schéma, carte, cause et conséquences, Paris.</li><li>Sans cours. Garde une feuille de brouillon et des crayons à portée de main.</li><li>Pour les réponses écrites, rédige des phrases complètes avec les <b>mots-clés du cours</b> : la correction automatique repère les idées attendues.</li><li>À la fin : ta note, ton score en % par partie, et la correction avec la réponse attendue. Relis-la pour juger ta réponse.</li><li>Les questions changent à chaque tentative.</li></ul></div>
+ ${h.length?`<div class="card"><h3>Tes tentatives</h3>${h.map((r,i)=>`<div class="row"><span>Tentative ${i+1} · ${r.d}</span><span>${dec(r.s)}/20</span></div>`).join("")}</div>`:""}
+ <button onclick="start()">Commencer l’examen</button></main>`;
+}
+function start(){qs=gen();ans=qs.map(q=>q.t=="s"?Array(q.items.length).fill(""):"");conf=false;t0=Date.now();clearInterval(tid);tid=setInterval(tick,500);exam();window.scrollTo(0,0)}
+function exam(){
+ let last=-1,html="";
+ qs.forEach((q,i)=>{
+  if(q.part!==last){last=q.part;const mx=qs.filter(x=>x.part==q.part).reduce((a,x)=>a+x.pts,0);html+=`<h2 style="margin-top:28px">Partie ${"ABCDE"[q.part]} : ${PARTS[q.part]} <span class="pt">${dec(mx)} pts</span></h2>`}
+  html+=`<div class="q"><div class="h"><span>Question ${i+1}</span><span class="pt">${q.pts} pt${q.pts>1?"s":""}</span></div><div>${q.html}</div>`+
+  (q.t=="s"?q.items.map((it,j)=>`<div class="it"><span>${it.l}</span><select aria-label="${esc(it.l)}" onchange="ans[${i}][${j}]=this.value;prog()"><option value="">— choisir —</option>${q.opts.map(o=>`<option>${o}</option>`).join("")}</select></div>`).join(""):`<textarea aria-label="Réponse question ${i+1}" oninput="ans[${i}]=this.value;prog()"></textarea>`)+`</div>`;
+ });
+ $("#app").innerHTML=`<header class="bar"><div><b>Examen blanc · Géographie</b><div class="sm" id="pg"></div></div><div id="clk">45:00</div></header><main>${html}<div id="msg" role="status"></div><button onclick="sub()">Rendre ma copie</button></main>`;
+ prog();tick();
+}
+const blank=(q,a)=>q.t=="s"?a.some(x=>x===""):a.trim()==="";
+const miss=()=>qs.filter((q,i)=>blank(q,ans[i])).length;
+function prog(){conf=false;const e=$("#msg");if(e)e.textContent="";$("#pg").textContent=`${qs.length-miss()} / ${qs.length} questions complètes`}
+function tick(){const l=Math.max(0,DUR-Math.floor((Date.now()-t0)/1000));const c=$("#clk");if(!c)return;c.textContent=String(Math.floor(l/60)).padStart(2,"0")+":"+String(l%60).padStart(2,"0");c.className=l<=300?"w":"";if(l<=0)finish(true)}
+function sub(){if(miss()>0&&!conf){conf=true;$("#msg").textContent=`Il reste ${miss()} question(s) incomplète(s). Appuie encore sur « Rendre ma copie » pour confirmer.`;return}finish(false)}
+function finish(auto){
+ clearInterval(tid);
+ const used=Math.min(DUR,Math.floor((Date.now()-t0)/1000));
+ const ea=qs.map((q,i)=>sc(q,ans[i]));
+ const got=[0,0,0,0,0],mx=[0,0,0,0,0];
+ qs.forEach((q,i)=>{mx[q.part]+=q.pts;got[q.part]+=ea[i]});
+ const s=got.reduce((a,b)=>a+b,0),pc=got.map((g,i)=>Math.round(100*g/mx[i]));
+ const h=hist(),prev=h.length?h[h.length-1].s:null;
+ save({d:new Date().toLocaleDateString("fr-FR"),s,pc});
+ const col=p=>p>=80?"var(--ok)":p>=50?"var(--wn)":"var(--ko)";
+ const lab=p=>p>=80?"Solide":p>=50?"Presque, à consolider":"À revoir en priorité";
+ const weak=pc.map((p,i)=>i).filter(i=>pc[i]<80).sort((a,b)=>pc[a]-pc[b]);
+ $("#app").innerHTML=`<main><h1>Ta copie corrigée</h1>
+ ${auto?`<p style="color:var(--ko);font-weight:800">Temps écoulé : la copie a été rendue automatiquement.</p>`:""}
+ <div class="card"><div class="big">${dec(s)}<span style="font-size:32px">/20</span></div><h3 style="margin-top:6px">${MEN(s)}</h3>
+ <p class="sm">Temps utilisé : ${Math.floor(used/60)} min ${used%60} s${prev!==null?` · Tentative précédente : ${dec(prev)}/20 (${s-prev>=0?"+":""}${dec(Math.round((s-prev)*10)/10)})`:""}</p></div>
+ <h2>Ton score par partie</h2>
+ ${pc.map((p,i)=>`<div class="card" style="margin:10px 0"><div class="row"><span>${PARTS[i]}</span><span style="color:${col(p)}">${p} %</span></div><div class="bar2"><b style="width:${p}%;background:${col(p)}"></b></div><div class="sm">${dec(got[i])}/${dec(mx[i])} pts · ${lab(p)}</div></div>`).join("")}
+ <div class="card"><h3>Ce qu’il faut retravailler</h3>${weak.length?`<ul>${weak.map(i=>`<li><b>${PARTS[i]}</b> (${pc[i]} %) : ${TIPS[i]}</li>`).join("")}</ul>`:`<p>Toutes les parties sont solides. Bravo !</p>`}</div>
+ <h2>Correction détaillée</h2>
+ ${qs.map((q,i)=>{const e=ea[i],cl=e>=q.pts?"good":e>0?"mid":"bad";let b;
+  if(q.t=="s")b=q.items.map((it,j)=>{const y=ans[i][j],o=y===it.c;return `<div>${o?"✓":"✗"} ${it.l} : ${y||"(pas de réponse)"}${o?"":` → <b>${it.c}</b>`}</div>`}).join("")+`<div class="ex">${q.expl}</div>`;
+  else b=`<div class="sm">Ta réponse : ${ans[i].trim()?esc(ans[i]):"(pas de réponse)"}</div><div class="sm">Idées repérées : ${Math.min(q.m,q.need)} sur ${q.need}</div><div>Réponse attendue : <b>${q.show}</b></div>`;
+  return `<div class="q ${cl}"><div class="h"><span>Question ${i+1}</span><span class="pt">${dec(e)}/${q.pts}</span></div><div>${q.html.replace(/<svg[\s\S]*<\/div>$|<svg[\s\S]*<\/svg>/,"")}</div>${b}</div>`}).join("")}
+ <button onclick="start()">Refaire un examen (nouvelles questions)</button> <button class="alt" onclick="intro()">Accueil</button></main>`;
+ window.scrollTo(0,0);
+}
+intro();
+</script>
+</body>
+</html>
